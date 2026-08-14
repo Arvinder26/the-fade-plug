@@ -8,7 +8,7 @@ async function render(path = "/", accept = "text/html") {
   return worker.fetch(new Request(`http://localhost${path}`, { headers: { accept } }), { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } }, { waitUntil() {}, passThroughOnException() {} });
 }
 
-test("server-renders the people-free Fade Plug homepage", async () => {
+test("server-renders the Fade Plug homepage with approved portfolio imagery", async () => {
   const response = await render();
   assert.equal(response.status, 200);
   assert.match(response.headers.get("content-type") ?? "", /^text\/html\b/i);
@@ -17,8 +17,10 @@ test("server-renders the people-free Fade Plug homepage", async () => {
   assert.match(html, /Precision cuts/);
   assert.match(html, /Book your cut/);
   assert.match(html, /application\/ld\+json/);
+  assert.match(html, /puneet-bhardwaj-portrait\.png/);
+  assert.match(html, /portfolio-skin-fade\.jpg/);
+  assert.match(html, /the_fadeplug001\/reel/);
   assert.doesNotMatch(html, /codex-preview|SkeletonPreview|react-loading-skeleton/);
-  assert.doesNotMatch(html, /<img\b/i);
 });
 
 test("renders booking and private-management routes", async () => {

@@ -13,15 +13,15 @@ const services = [
 ];
 
 const portfolioItems = [
-  { category: "Fades", title: "Fade Study", note: "Transitions / detail" },
-  { category: "Beards", title: "Form & Shape", note: "Balance / structure" },
-  { category: "Designs", title: "Precision Lines", note: "Custom / considered" },
-  { category: "Transformations", title: "Before / After", note: "Change / finish" },
-  { category: "Mobile", title: "On Location", note: "Private / convenient" },
-  { category: "Events", title: "Ready On Time", note: "Artists / events" },
+  { category: "Fades", title: "Skin Fade Precision", note: "Clean blend / sharp finish", image: "/images/portfolio-skin-fade.jpg", alt: "Fade Plug client with a clean skin fade and sharp temple line", source: "https://www.instagram.com/the_fadeplug001/reel/DbuOaQrheZ8/" },
+  { category: "Beards", title: "Beard Sculpt", note: "Shape / balance / detail", image: "/images/portfolio-beard-sculpt.jpg", alt: "Fade Plug beard sculpt with a textured crop and precise fade", source: "https://www.instagram.com/the_fadeplug001/reel/Db6m0bSym6u/" },
+  { category: "Fades", title: "Signature Taper", note: "Clipper work / control", image: "/images/portfolio-signature-fade.jpg", alt: "Fade Plug barber working on a signature taper haircut", source: "https://www.instagram.com/the_fadeplug001/reel/Db4UWqNhMun/" },
+  { category: "Transformations", title: "Textured Finish", note: "Texture / shape / movement", image: "/images/portfolio-textured-fade.jpg", alt: "Finished textured haircut and beard by Fade Plug", source: "https://www.instagram.com/the_fadeplug001/reel/Db5jKnmhrrV/" },
+  { category: "Beards", title: "Sharp Line-Up", note: "Edges / symmetry / form", image: "/images/portfolio-line-up.jpg", alt: "Sharp hair and beard line-up by Fade Plug", source: "https://www.instagram.com/the_fadeplug001/reel/Db1jJlbBabP/" },
+  { category: "Designs", title: "Modern Mullet", note: "Creative shape / custom finish", image: "/images/portfolio-modern-mullet.jpg", alt: "Modern mullet with a clean side fade by Fade Plug", source: "https://www.instagram.com/the_fadeplug001/reel/DbuOaQrheZ8/" },
 ];
 
-const filters = ["All", "Fades", "Beards", "Designs", "Transformations", "Mobile", "Events"];
+const filters = ["All", "Fades", "Beards", "Designs", "Transformations"];
 
 const faq = [
   ["Where is Fade Plug located?", "Fade Plug is based in Papakura, Auckland. Exact studio directions are provided privately with a confirmed booking."],
@@ -42,6 +42,7 @@ export default function HomeClient() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [filter, setFilter] = useState("All");
+  const [selectedWork, setSelectedWork] = useState<(typeof portfolioItems)[number] | null>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -49,6 +50,20 @@ export default function HomeClient() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!selectedWork) return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setSelectedWork(null);
+    };
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [selectedWork]);
 
   const closeMenu = () => setMenuOpen(false);
 
@@ -126,7 +141,7 @@ export default function HomeClient() {
       <section className="section work" id="work">
         <div className="section-head section-head--align-end">
           <div><p className="eyebrow"><span /> Selected details</p><h2>The work<br /><em>speaks.</em></h2></div>
-          <p>Portfolio photography is intentionally withheld until approved, people-free assets are supplied. The system below is ready for genuine work when available.</p>
+          <p>Selected work from the official Fade Plug Instagram. Open any image for a closer look or follow the original reel for full context.</p>
         </div>
         <div className="filter-row" role="group" aria-label="Portfolio filters">
           {filters.map(item => <button type="button" className={filter === item ? "active" : ""} onClick={() => setFilter(item)} key={item}>{item}</button>)}
@@ -134,9 +149,11 @@ export default function HomeClient() {
         <div className="portfolio-grid">
           {portfolioItems.filter(item => filter === "All" || item.category === filter).map((item, index) => (
             <article className={`portfolio-card portfolio-card--${index % 3 + 1}`} key={item.title}>
-              <div className="precision-lines" aria-hidden="true"><i /><i /><i /><b>{String(index + 1).padStart(2, "0")}</b></div>
+              <button className="portfolio-image-button" type="button" onClick={() => setSelectedWork(item)} aria-label={`Open ${item.title} gallery image`}>
+                <img src={item.image} alt={item.alt} loading="lazy" decoding="async" />
+              </button>
               <div className="portfolio-meta"><span>{item.category}</span><h3>{item.title}</h3><p>{item.note}</p></div>
-              <a href={`/book?look=${encodeURIComponent(item.title)}`}>Book this look <span>↗</span></a>
+              <a href={item.source} target="_blank" rel="noreferrer">View original reel <span>↗</span></a>
             </article>
           ))}
         </div>
@@ -148,8 +165,10 @@ export default function HomeClient() {
       </section>
 
       <section className="section about" id="about">
-        <div className="about-graphic" aria-label="Fade Plug barber profile graphic">
-          <div className="portrait-placeholder"><span>PB</span><small>BARBER / FOUNDER</small></div><div className="about-stamp">PAPAKURA<br />EST. CRAFT<br />2020</div>
+        <div className="about-graphic">
+          <img className="puneet-portrait" src="/images/puneet-bhardwaj-portrait.png" alt="Puneet Bhardwaj, barber and founder of Fade Plug" loading="lazy" decoding="async" />
+          <div className="portrait-label"><span>PUNEET BHARDWAJ</span><small>BARBER / FOUNDER</small></div>
+          <div className="about-stamp">PAPAKURA<br />EST. CRAFT<br />2020</div>
         </div>
         <div className="about-copy"><p className="eyebrow"><span /> Behind the brand</p><h2>Meet<br /><em>Puneet.</em></h2><p className="large-copy">Fade Plug was built around precision, consistency and personal service.</p><p>Based in Papakura, Puneet delivers appointment-only grooming for clients who value their time, their privacy and a sharp finish.</p><ul className="feature-list"><li>Barbering experience since 2020</li><li>Fade and beard specialist</li><li>Mobile grooming available</li><li>Individual appointment-only attention</li></ul><a className="text-link" href="#work">See Puneet’s work <span>↗</span></a></div>
       </section>
@@ -181,6 +200,15 @@ export default function HomeClient() {
         <div className="footer-bottom"><span>© {new Date().getFullYear()} Fade Plug®. All rights reserved.</span><span>Papakura • Auckland • NZBN [IF APPLICABLE]</span></div>
       </footer>
       <a className="mobile-book-cta" href="/book">Book now <span>↗</span></a>
+      {selectedWork && (
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label={`${selectedWork.title} gallery image`} onClick={() => setSelectedWork(null)}>
+          <div className="lightbox-panel" onClick={event => event.stopPropagation()}>
+            <button className="lightbox-close" type="button" onClick={() => setSelectedWork(null)} aria-label="Close gallery">×</button>
+            <div className="lightbox-image"><img src={selectedWork.image} alt={selectedWork.alt} /></div>
+            <div className="lightbox-copy"><span>{selectedWork.category}</span><h2>{selectedWork.title}</h2><p>{selectedWork.note}</p><div><a className="button" href={`/book?look=${encodeURIComponent(selectedWork.title)}`}>Book this look <span>↗</span></a><a className="text-link" href={selectedWork.source} target="_blank" rel="noreferrer">Original reel <span>↗</span></a></div></div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
