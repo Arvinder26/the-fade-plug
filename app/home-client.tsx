@@ -1,41 +1,45 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import BrandMark from "../components/brand-mark";
 
 const services = [
-  { name: "Signature Haircut", tag: "Core service", description: "A considered cut shaped around your requested finish and personal style.", code: "01" },
-  { name: "Zero / Skin Fade", tag: "Fade work", description: "Precision fade work with clean transitions and a detailed finish.", code: "02" },
-  { name: "Beard Sculpting", tag: "Detail work", description: "Shape, balance and sharp definition for a clean, intentional result.", code: "03" },
-  { name: "Haircut + Beard", tag: "Complete grooming", description: "A coordinated haircut and beard service for one consistent finish.", code: "04" },
-  { name: "Hair Design", tag: "Creative work", description: "Custom detailing discussed and confirmed before your appointment.", code: "05" },
-  { name: "Mobile Grooming", tag: "Concierge", description: "Premium grooming at an approved Auckland home, studio or event location.", code: "06" },
+  { name: "Haircut", tag: "Core service", description: "A considered cut shaped around your requested finish and personal style.", price: "$40", onlineTotal: "$40.53", duration: "45 min", code: "01" },
+  { name: "Beard Trim / Sculpt", tag: "Beard service", description: "Trim, shape and sharp definition, with your preferred price selected when booking.", price: "$20 / $25", onlineTotal: "$20.42 / $25.44", duration: "30 min", code: "02" },
+  { name: "Wax", tag: "Grooming", description: "A clean finishing service for a polished, well-presented result.", price: "$20", onlineTotal: "$20.42", duration: "20 min", code: "03" },
+  { name: "Haircut + Beard + Wax", tag: "Complete combo", description: "The complete Fade Plug grooming package in one appointment.", price: "$70", onlineTotal: "$70.69", duration: "1 hr 15 min", code: "04" },
+  { name: "Ear Wax", tag: "Add-on", description: "Quick ear waxing available with or without another grooming service.", price: "$5", onlineTotal: "$5.34", duration: "10 min", code: "05" },
+  { name: "Nose Wax", tag: "Add-on", description: "Quick nose waxing available with or without another grooming service.", price: "$5", onlineTotal: "$5.34", duration: "10 min", code: "06" },
+  { name: "Face Scrub", tag: "Skin care", description: "A refreshing facial scrub to clean and revive the skin.", price: "$30", onlineTotal: "$30.47", duration: "30 min", code: "07" },
+  { name: "Hair Colour", tag: "Colour service", description: "Hair colour application for a refreshed, even finish.", price: "$30", onlineTotal: "$30.47", duration: "45 min", code: "08" },
+  { name: "Beard Colour", tag: "Colour service", description: "Beard colour application for a fuller, more even appearance.", price: "$20", onlineTotal: "$20.42", duration: "30 min", code: "09" },
 ];
 
 const portfolioItems = [
-  { category: "Fades", title: "Skin Fade Precision", note: "Clean blend / sharp finish", image: "/images/portfolio-skin-fade.jpg", alt: "Fade Plug client with a clean skin fade and sharp temple line", source: "https://www.instagram.com/the_fadeplug001/reel/DbuOaQrheZ8/" },
-  { category: "Beards", title: "Beard Sculpt", note: "Shape / balance / detail", image: "/images/portfolio-beard-sculpt.jpg", alt: "Fade Plug beard sculpt with a textured crop and precise fade", source: "https://www.instagram.com/the_fadeplug001/reel/Db6m0bSym6u/" },
-  { category: "Fades", title: "Signature Taper", note: "Clipper work / control", image: "/images/portfolio-signature-fade.jpg", alt: "Fade Plug barber working on a signature taper haircut", source: "https://www.instagram.com/the_fadeplug001/reel/Db4UWqNhMun/" },
-  { category: "Transformations", title: "Textured Finish", note: "Texture / shape / movement", image: "/images/portfolio-textured-fade.jpg", alt: "Finished textured haircut and beard by Fade Plug", source: "https://www.instagram.com/the_fadeplug001/reel/Db5jKnmhrrV/" },
-  { category: "Beards", title: "Sharp Line-Up", note: "Edges / symmetry / form", image: "/images/portfolio-line-up.jpg", alt: "Sharp hair and beard line-up by Fade Plug", source: "https://www.instagram.com/the_fadeplug001/reel/Db1jJlbBabP/" },
-  { category: "Designs", title: "Modern Mullet", note: "Creative shape / custom finish", image: "/images/portfolio-modern-mullet.jpg", alt: "Modern mullet with a clean side fade by Fade Plug", source: "https://www.instagram.com/the_fadeplug001/reel/DbuOaQrheZ8/" },
+  { category: "Fades", title: "Skin Fade Precision", note: "Clean blend / sharp finish", image: "/images/portfolio-skin-fade.jpg", alt: "Fade Plug client with a clean skin fade and sharp temple line", focus: "60% 47%", source: "https://www.instagram.com/the_fadeplug001/reel/DbuOaQrheZ8/" },
+  { category: "Beards", title: "Beard Sculpt", note: "Shape / balance / detail", image: "/images/portfolio-beard-sculpt.jpg", alt: "Fade Plug beard sculpt with a textured crop and precise fade", focus: "50% 54%", source: "https://www.instagram.com/the_fadeplug001/reel/Db6m0bSym6u/" },
+  { category: "Fades", title: "Signature Haircut", note: "Shape / styling / control", image: "/images/portfolio-signature-fade.jpg", alt: "Fade Plug barber shaping and styling a signature haircut", focus: "50% 45%", source: "https://www.instagram.com/the_fadeplug001/reel/Db4UWqNhMun/" },
+  { category: "Fades", title: "Textured Finish", note: "Texture / shape / movement", image: "/images/portfolio-textured-fade.jpg", alt: "Finished textured crop, fade and beard by Fade Plug", focus: "50% 47%", source: "https://www.instagram.com/the_fadeplug001/reel/Db5jKnmhrrV/" },
+  { category: "Beards", title: "Sharp Line-Up", note: "Edges / symmetry / form", image: "/images/portfolio-line-up.jpg", alt: "Sharp hair and beard line-up by Fade Plug", focus: "50% 52%", source: "https://www.instagram.com/the_fadeplug001/reel/Db1jJlbBabP/" },
+  { category: "Designs", title: "Modern Mullet", note: "Creative shape / custom finish", image: "/images/portfolio-modern-mullet.jpg", alt: "Modern mullet with a clean side fade by Fade Plug", focus: "48% 48%", source: "https://www.instagram.com/the_fadeplug001/reel/DbuOaQrheZ8/" },
 ];
 
-const filters = ["All", "Fades", "Beards", "Designs", "Transformations"];
+const filters = ["All", "Fades", "Beards", "Designs"];
 
 const faq = [
-  ["Where is Fade Plug located?", "Fade Plug is based in Papakura, Auckland. Exact studio directions are provided privately with a confirmed booking."],
+  ["Where is Fade Plug located?", "Fade Plug is at 114 Cargill Street, Papakura, Auckland."],
   ["Do you accept walk-ins?", "No. Fade Plug is appointment-only so every client receives reserved time and focused attention."],
-  ["Which Auckland areas receive mobile service?", "Selected Auckland areas are available. The confirmed suburb list and zone fees will be shown before mobile bookings go live."],
-  ["Is payment required when booking?", "A deposit or full payment will be supported through a secure payment provider. The required amount will be shown before you pay."],
-  ["Can I reschedule?", "Yes, when your booking is still inside the approved rescheduling window. The exact deadline will be visible in your confirmation and private manage-booking link."],
-  ["What happens if I cancel late?", "The approved late-cancellation outcome will be shown clearly before payment. No policy term will be applied without being disclosed first."],
-  ["What happens if I am late?", "The confirmed late-arrival policy will be displayed at checkout and in your booking confirmation."],
+  ["Which Auckland areas receive mobile service?", "Mobile grooming is available across Auckland. A $100 minimum travel fee applies and there is no minimum service value."],
+  ["Is payment required when booking?", "Yes. A 20% service deposit plus the exact online-processing cost reserves the appointment through Stripe. Both amounts are shown before payment; the remaining 80% is paid at the appointment."],
+  ["Can I reschedule?", "Yes. One free transfer is available through your secure manage-booking link when completed at least 24 hours before the appointment."],
+  ["What happens if I cancel late?", "Inside 24 hours, the 20% service deposit is retained for the reserved time and the processing cost has already been incurred. Earlier cancellations receive a refund of the full amount paid online."],
+  ["What happens if I am late?", "A 15-minute grace period applies. The service may be shortened to protect the next booking; if it can no longer be completed, it is treated as a no-show."],
   ["Can I request a specific style?", "Yes. Add notes when booking and bring a clear reference. Puneet will confirm what is achievable for your hair and appointment type."],
-  ["Can I upload a reference photograph?", "Yes. The booking flow includes an optional private reference-image upload once secure booking storage is connected."],
+  ["Can I upload a reference photograph?", "Yes. Add an optional image when booking. It is stored privately, never shown publicly and removed 90 days after the appointment."],
   ["Do you offer event or group bookings?", "Event and group enquiries are welcome and are quoted after the location, timing and group size are confirmed."],
   ["What should I prepare for a mobile appointment?", "A clean, well-lit space, suitable power access, parking and clear entry instructions may be required. Final requirements will be confirmed before payment."],
-  ["Which payment methods are accepted?", "The booking experience is designed for card, Apple Pay and Google Pay through a secure provider. Final availability depends on the connected payment account."],
+  ["Which payment methods are accepted?", "Stripe secure checkout supports major credit and debit cards, including Visa, Mastercard and American Express, plus Apple Pay and Google Pay when available on your device."],
 ];
 
 export default function HomeClient() {
@@ -94,7 +98,7 @@ export default function HomeClient() {
           <div className="hero-copy reveal">
             <p className="eyebrow"><span /> Papakura • Mobile across Auckland</p>
             <h1>Precision cuts.<br /><em>Premium presence.</em></h1>
-            <p className="hero-lede">Appointment-only grooming by Puneet Bhardwaj. Precision fades, sharp beard work and premium mobile service across selected Auckland areas.</p>
+            <p className="hero-lede">Appointment-only grooming by Puneet Bhardwaj. Precision fades, sharp beard work and premium mobile service across Auckland.</p>
             <div className="hero-actions">
               <a className="button" href="/book">Book your cut <span>↗</span></a>
               <a className="text-link" href="#work">View the work <span>↓</span></a>
@@ -110,7 +114,7 @@ export default function HomeClient() {
             <div className="measure measure--top"><b>0.1</b><i /></div>
             <div className="measure measure--side"><b>PRECISION</b><i /></div>
             <div className="availability-card">
-              <span className="status-dot" /><div><small>LIVE AVAILABILITY</small><strong>Connect booking calendar</strong></div><a href="/book" aria-label="Open booking page">↗</a>
+              <span className="status-dot" /><div><small>LIVE AVAILABILITY</small><strong>Open daily, 9am–8pm</strong></div><a href="/book" aria-label="Open booking page">↗</a>
             </div>
           </div>
         </div>
@@ -124,14 +128,14 @@ export default function HomeClient() {
       <section className="section services" id="services">
         <div className="section-head">
           <div><p className="eyebrow"><span /> The menu</p><h2>Choose your<br /><em>service.</em></h2></div>
-          <p>Every appointment is given the time and attention required for a sharp, precise finish. Final menu, durations and prices are pending confirmation.</p>
+          <p>Clear service pricing, practical time estimates and an exact online-processing amount shown in the booking total before payment.</p>
         </div>
         <div className="service-grid">
           {services.map(service => (
             <a className="service-card" href={`/book?service=${encodeURIComponent(service.name)}`} key={service.name}>
               <div className="service-top"><span>{service.code}</span><small>{service.tag}</small></div>
               <h3>{service.name}</h3><p>{service.description}</p>
-              <dl><div><dt>Duration</dt><dd>[TO CONFIRM]</dd></div><div><dt>Price</dt><dd>[TO CONFIRM]</dd></div></dl>
+              <dl><div><dt>Estimated time</dt><dd>{service.duration}</dd></div><div><dt>Service / studio online</dt><dd><span>{service.price}</span><small>{service.onlineTotal} online</small></dd></div></dl>
               <span className="card-link">Book this service <b>↗</b></span>
             </a>
           ))}
@@ -150,7 +154,7 @@ export default function HomeClient() {
           {portfolioItems.filter(item => filter === "All" || item.category === filter).map((item, index) => (
             <article className={`portfolio-card portfolio-card--${index % 3 + 1}`} key={item.title}>
               <button className="portfolio-image-button" type="button" onClick={() => setSelectedWork(item)} aria-label={`Open ${item.title} gallery image`}>
-                <img src={item.image} alt={item.alt} loading="lazy" decoding="async" />
+                <Image src={item.image} alt={item.alt} fill sizes="(max-width: 800px) 100vw, (max-width: 1100px) 50vw, 33vw" quality={90} style={{ objectPosition: item.focus }} />
               </button>
               <div className="portfolio-meta"><span>{item.category}</span><h3>{item.title}</h3><p>{item.note}</p></div>
               <a href={item.source} target="_blank" rel="noreferrer">View original reel <span>↗</span></a>
@@ -166,7 +170,7 @@ export default function HomeClient() {
 
       <section className="section about" id="about">
         <div className="about-graphic">
-          <img className="puneet-portrait" src="/images/puneet-bhardwaj-portrait.png" alt="Puneet Bhardwaj, barber and founder of Fade Plug" loading="lazy" decoding="async" />
+          <Image className="puneet-portrait" src="/images/puneet-bhardwaj-portrait.png" alt="Puneet Bhardwaj, barber and founder of Fade Plug" fill sizes="(max-width: 800px) 100vw, 50vw" quality={92} />
           <div className="portrait-label"><span>PUNEET BHARDWAJ</span><small>BARBER / FOUNDER</small></div>
           <div className="about-stamp">PAPAKURA<br />EST. CRAFT<br />2020</div>
         </div>
@@ -176,9 +180,9 @@ export default function HomeClient() {
       <section className="mobile-service" id="mobile">
         <div className="mobile-grid">
           <div><p className="eyebrow eyebrow--dark"><span /> Premium concierge grooming</p><h2>The fade<br /><em>comes to you.</em></h2><p className="mobile-lede">Premium grooming at your home, accommodation, studio, workplace or approved event location.</p><a className="button button--dark" href="/book?location=mobile">Book mobile grooming <span>↗</span></a></div>
-          <ol className="mobile-steps"><li><span>01</span><div><b>Choose a mobile service</b><p>Select the grooming service you need.</p></div></li><li><span>02</span><div><b>Enter your Auckland suburb</b><p>Service area and any zone fee are confirmed first.</p></div></li><li><span>03</span><div><b>Select a time & pay securely</b><p>See the complete cost before payment.</p></div></li></ol>
+          <ol className="mobile-steps"><li><span>01</span><div><b>Choose a mobile service</b><p>Select any grooming service—there is no minimum service value.</p></div></li><li><span>02</span><div><b>Enter your Auckland suburb</b><p>Mobile service is available across Auckland.</p></div></li><li><span>03</span><div><b>Select a time & pay securely</b><p>The $100 minimum travel fee, 20% deposit and exact online-processing cost are shown before payment.</p></div></li></ol>
         </div>
-        <div className="mobile-facts"><div><span>Service areas</span><b>[TO CONFIRM]</b></div><div><span>Travel fee</span><b>[TO CONFIRM]</b></div><div><span>Minimum value</span><b>[TO CONFIRM]</b></div><div><span>Parking & access</span><b>[TO CONFIRM]</b></div></div>
+        <div className="mobile-facts"><div><span>Service areas</span><b>All Auckland</b></div><div><span>Travel fee</span><b>$100 minimum</b></div><div><span>Minimum booking value</span><b>None</b></div><div><span>Parking & access</span><b>Agreed before payment</b></div></div>
       </section>
 
       <section className="section review-standard">
@@ -187,7 +191,7 @@ export default function HomeClient() {
       </section>
 
       <section className="section faq" id="faq">
-        <div className="faq-intro"><p className="eyebrow"><span /> Need to know</p><h2>Questions,<br /><em>answered.</em></h2><p>Still need help? Contact details will appear here once confirmed.</p></div>
+        <div className="faq-intro"><p className="eyebrow"><span /> Need to know</p><h2>Questions,<br /><em>answered.</em></h2><p>Still need help? Call 022 302 2464 or email bhardwajpuneet0786@gmail.com.</p></div>
         <div className="faq-list">{faq.map(([question, answer], index) => <details key={question}><summary><span>{String(index + 1).padStart(2, "0")}</span>{question}<b>+</b></summary><p>{answer}</p></details>)}</div>
       </section>
 
@@ -196,15 +200,15 @@ export default function HomeClient() {
       </section>
 
       <footer className="footer">
-        <div className="footer-main"><div><a href="#top"><BrandMark /></a><p>Precision grooming. Personal service.<br />Papakura and selected Auckland areas.</p></div><div className="footer-links"><div><span>Explore</span><a href="/book">Book now</a><a href="#services">Services</a><a href="#work">Portfolio</a><a href="#mobile">Mobile service</a><a href="#about">About</a></div><div><span>Booking</span><a href="/manage">Manage booking</a><a href="/cancellation-policy">Cancellation policy</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a></div><div><span>Connect</span><a href="https://www.instagram.com/the_fadeplug001/" target="_blank" rel="noreferrer">Instagram ↗</a><span className="placeholder-contact">[PHONE]</span><span className="placeholder-contact">[EMAIL]</span></div></div></div>
-        <div className="footer-bottom"><span>© {new Date().getFullYear()} Fade Plug®. All rights reserved.</span><span>Papakura • Auckland • NZBN [IF APPLICABLE]</span></div>
+        <div className="footer-main"><div><a href="#top"><BrandMark /></a><p>Precision grooming. Personal service.<br />114 Cargill Street, Papakura.</p></div><div className="footer-links"><div><span>Explore</span><a href="/book">Book now</a><a href="#services">Services</a><a href="#work">Portfolio</a><a href="#mobile">Mobile service</a><a href="#about">About</a></div><div><span>Booking</span><a href="/manage">Manage booking</a><a href="/cancellation-policy">Cancellation policy</a><a href="/terms">Terms</a><a href="/privacy">Privacy</a></div><div><span>Connect</span><a href="https://www.instagram.com/the_fadeplug001/" target="_blank" rel="noreferrer">Instagram ↗</a><a href="tel:+64223022464">022 302 2464</a><a href="mailto:bhardwajpuneet0786@gmail.com">bhardwajpuneet0786@gmail.com</a><span className="placeholder-contact">114 Cargill Street, Papakura</span></div></div></div>
+        <div className="footer-bottom"><span>© {new Date().getFullYear()} Fade Plug®. All rights reserved.</span><span>Papakura • Auckland • Appointment only</span></div>
       </footer>
       <a className="mobile-book-cta" href="/book">Book now <span>↗</span></a>
       {selectedWork && (
-        <div className="lightbox" role="dialog" aria-modal="true" aria-label={`${selectedWork.title} gallery image`} onClick={() => setSelectedWork(null)}>
-          <div className="lightbox-panel" onClick={event => event.stopPropagation()}>
+        <div className="lightbox" role="dialog" aria-modal="true" aria-label={`${selectedWork.title} gallery image`}>
+          <div className="lightbox-panel">
             <button className="lightbox-close" type="button" onClick={() => setSelectedWork(null)} aria-label="Close gallery">×</button>
-            <div className="lightbox-image"><img src={selectedWork.image} alt={selectedWork.alt} /></div>
+            <div className="lightbox-image"><Image src={selectedWork.image} alt={selectedWork.alt} fill sizes="(max-width: 980px) 100vw, 60vw" quality={95} /></div>
             <div className="lightbox-copy"><span>{selectedWork.category}</span><h2>{selectedWork.title}</h2><p>{selectedWork.note}</p><div><a className="button" href={`/book?look=${encodeURIComponent(selectedWork.title)}`}>Book this look <span>↗</span></a><a className="text-link" href={selectedWork.source} target="_blank" rel="noreferrer">Original reel <span>↗</span></a></div></div>
           </div>
         </div>
